@@ -1,0 +1,12 @@
+addNormal
+addKeyLock, 1, 2
+addNormalToKey, 1, 2
+addNormal, 1, 2
+moveLockBack, 0, 4
+makeBranching, 0, 1
+addPuzzle, 0, 1
+addKeyLock, 0, 1
+addNormalToKey, 0, 1
+moveLockBack, 0, 4
+addLever, 0, 1
+makeLink, 1, 3

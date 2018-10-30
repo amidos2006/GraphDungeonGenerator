@@ -11,7 +11,7 @@ namespace ObstacleTowerGeneration
             for(int i=0; i<100; i++){
                 MissionGraph.Generator mg = new MissionGraph.Generator(new Random());
                 mg.loadPatterns("grammar/");
-                MissionGraph.Graph resultGraph = mg.GenerateDungeon("graphStart.txt", "recipe.txt");
+                MissionGraph.Graph resultGraph = mg.GenerateDungeon("graphStart.txt", "graphRecipe.txt");
                 if(resultGraph == null){
                     continue;
                 }

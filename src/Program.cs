@@ -4,15 +4,32 @@ using ObstacleTowerGeneration;
 
 namespace ObstacleTowerGeneration
 {
+    struct DungeonResult{
+        public MissionGraph.Graph missionGraph{
+            set;
+            get;
+        }
+        public LayoutGrammar.Map layoutMap{
+            set;
+            get;
+        }
+
+        public DungeonResult(MissionGraph.Graph missionGraph, LayoutGrammar.Map layoutMap){
+            this.missionGraph = missionGraph;
+            this.layoutMap = layoutMap;
+        }
+    }
+
     class Program
     {
-        static void Main(string[] args)
-        {
-            for(int i=0; i<100; i++){
+        static DungeonResult generateDungeon(int totalTrials = 100, int graphTrials = 100, int mapTrials = 100){
+            MissionGraph.Graph resultGraph = null;
+            LayoutGrammar.Map resultMap = null;
+
+            for(int i=0; i<totalTrials; i++){
                 MissionGraph.Generator mg = new MissionGraph.Generator(new Random());
                 mg.loadPatterns("grammar/");
-                MissionGraph.Graph resultGraph = null;
-                for (int j = 0; j < 100; j++){
+                for (int j = 0; j < graphTrials; j++){
                     resultGraph = mg.GenerateDungeon("graphStart.txt", "graphRecipe.txt");
                     if(resultGraph != null && Helper.checkIsSolvable(resultGraph, resultGraph.nodes[0])){
                         break;
@@ -24,11 +41,9 @@ namespace ObstacleTowerGeneration
                 if(resultGraph == null){
                     continue;
                 }
-                Console.Write(resultGraph);
 
                 LayoutGrammar.Generator lg = new LayoutGrammar.Generator(new Random());
-                LayoutGrammar.Map resultMap = null;
-                for(int j=0; j<100; j++){
+                for(int j=0; j<mapTrials; j++){
                     resultMap = lg.generateDungeon(resultGraph);
                     if(resultMap != null){
                         break;
@@ -40,9 +55,17 @@ namespace ObstacleTowerGeneration
                 if(resultMap == null){
                     continue;
                 }
-                Console.Write(resultMap);
                 break;
             }
+            return new DungeonResult(resultGraph, resultMap);
+        }
+
+        static void Main(string[] args)
+        {
+            DungeonResult result = generateDungeon();
+            Console.WriteLine(result.missionGraph);
+            Console.WriteLine();
+            Console.WriteLine(result.layoutMap);
         }
     }
 }

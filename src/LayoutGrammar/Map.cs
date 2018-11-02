@@ -19,9 +19,11 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             Cell start = new Cell(0, 0, CellType.Normal, node);
             this.usedSpaces.Add(start.getLocationString(), start);
             this.openLocations.Add("0,0", new List<OpenNode>());
-            foreach(int[] dir in this.directions){
-                this.openLocations["0,0"].Add(new OpenNode(dir[0], dir[1], start));
-            }
+            int[] randDir = this.directions[this.random.Next(this.directions.Count)];
+            this.openLocations["0,0"].Add(new OpenNode(randDir[0], randDir[1], start));
+            // foreach(int[] dir in this.directions){
+            //     this.openLocations["0,0"].Add(new OpenNode(dir[0], dir[1], start));
+            // }
         }
 
         private OpenNode getWorkingLocation(int parentID, int accessLevel){

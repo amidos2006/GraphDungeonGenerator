@@ -34,6 +34,24 @@ The **Mission Graph** uses graph grammar to generate the mission. All the gramma
 - `makeBranching`: change the structure of three consecutive nodes to make them as branching nodes.
 - `moveLockBack`: moves a normal task from behind a **Lock** node towards before which will decrease its access level.
 
-To adjust the generated
+To adjust the generated **Mission Graph** use the `graphRecipe.txt` file. The file consists of several lines where the system applies each line in order for 0 to many times. If any line starts with a **#** the system will consider it as a comment and ignore it. Each line consists of 3 parts separated with commas:
+- **Rule Name**: is the name of the rule that need to be applied. If the system didn't find that rule defined, it will apply a random rule. You can use that point to apply random rules by writing **random** in the rule name.
+- **Minimum Number**: is the minimum number of times the system has to run that rule. 
+- **Maximum Number**: is the maximum number of times the system has to run that rule.
+For example: `addNormal, 0, 3` means the system will apply addNormal rule between 0 and 3 times. At any time, the user can remove one or two of the arguments. For example: `addNormal, 3` will apply addNormal 3 times, while `addNormal` will apply it 1 time.
 
 ### Layout Map
+
+
+### How to use the Code
+You can generate a dungeon using `generateDungeon` function in `ObstacleTowerGeneration.Program` file. The function takes 3 parameters which identify the number of times the system will try to generate the dungeon. Default values are 100 for each of the dungeon pieces and 100 for the total dungeon.
+
+The `generateDungeon` function returns a `DungeonResult` struct. The `DungeonResult` struct consists of 2 parts:
+- `missionGraph`: is a `ObstacleTowerGeneration.MissionGraph.Graph` object that represents the generated **Mission Graph**.
+- `layoutMap`: is a `ObstacleTowerGeneration.LayoutGrammar.Map` obejct that represents the generated **Layout Map**.
+
+#### ObstacleTowerGeneration.MissionGraph.Graph
+Graph object is a list of `ObstacleTowerGeneration.MissionGraph.Node` objects that consitutes the full graph. Each node has `accessLevel`, `type`, and `id` properties. `accessLevel` is an int that reflects the value of the access level of the node, `type` is an enum that reflects the node Type, and `id` is a unique integer that identify each node. Node object also have `getChildren` function that return a list of nodes that are connected to it.
+
+#### ObstacleTowerGeneration.LayoutGrammar.Map
+Map object has a function called `get2DMap` that returns a 2D grid of `ObstacleTowerGeneration.LayoutGrammar.Map` that consitutes the level layout. Each point in the grid can be a `null` if empty or a `ObstacleTowerGeneration.LayoutGrammar.Cell` object if it is not empty. Cell objects has `type` and `node` properties; and a `getDoor` function.

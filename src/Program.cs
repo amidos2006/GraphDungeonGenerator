@@ -45,7 +45,7 @@ namespace ObstacleTowerGeneration
                 LayoutGrammar.Generator lg = new LayoutGrammar.Generator(new Random());
                 for(int j=0; j<mapTrials; j++){
                     resultMap = lg.generateDungeon(resultGraph);
-                    if(resultMap != null){
+                    if(resultMap != null && Helper.checkIsSolvable(resultMap.get2DMap(), resultMap.getCell(0))){
                         break;
                     }
                     else{

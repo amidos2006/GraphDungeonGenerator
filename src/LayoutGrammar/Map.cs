@@ -267,7 +267,10 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             }
             Cell[,] result = new Cell[maxX - minX + 1, maxY - minY + 1];
             foreach (Cell c in this.usedSpaces.Values){
-                result[c.x - minX, c.y - minY] = c;
+                Cell clone = c.clone();
+                clone.x = c.x - minX;
+                clone.y = c.y - minY;
+                result[clone.x, clone.y] = clone;
             }
             return result;
         }

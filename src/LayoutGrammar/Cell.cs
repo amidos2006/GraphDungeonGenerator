@@ -37,6 +37,15 @@ namespace ObstacleTowerGeneration.LayoutGrammar
             this.parent = null;
         }
 
+        public Cell clone(){
+            Cell result = new Cell(this.x, this.y, this.type, this.node);
+            result.parent = this.parent;
+            for(int i=0; i<this.doorTypes.Length; i++){
+                result.doorTypes[i] = this.doorTypes[i];
+            }
+            return result;
+        }
+
         private int getDoorIndex(int dirX, int dirY){
             if(dirX <= -1){
                 return 0;

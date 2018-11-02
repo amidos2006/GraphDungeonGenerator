@@ -64,7 +64,9 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
                     Cell to = result.getCell(child.id);
                     if (current.type == MissionGraph.NodeType.Lever)
                     {
-                        result.makeConnection(from, to, nodes.Count * nodes.Count);
+                        if(!result.makeConnection(from, to, nodes.Count * nodes.Count)){
+                            return null;
+                        }
                     }
                     open.Add(child);
                 }

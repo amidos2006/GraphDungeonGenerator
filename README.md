@@ -54,4 +54,9 @@ The `generateDungeon` function returns a `DungeonResult` struct. The `DungeonRes
 Graph object is a list of `ObstacleTowerGeneration.MissionGraph.Node` objects that consitutes the full graph. Each node has `accessLevel`, `type`, and `id` properties. `accessLevel` is an int that reflects the value of the access level of the node, `type` is an enum that reflects the node Type, and `id` is a unique integer that identify each node. Node object also have `getChildren` function that return a list of nodes that are connected to it.
 
 #### ObstacleTowerGeneration.LayoutGrammar.Map
-Map object has a function called `get2DMap` that returns a 2D grid of `ObstacleTowerGeneration.LayoutGrammar.Map` that consitutes the level layout. Each point in the grid can be a `null` if empty or a `ObstacleTowerGeneration.LayoutGrammar.Cell` object if it is not empty. Cell objects has `type` and `node` properties; and a `getDoor` function.
+Map object has a function called `get2DMap` that returns a 2D grid of `ObstacleTowerGeneration.LayoutGrammar.Map` that consitutes the level layout. Each point in the grid can be a `null` if empty or a `ObstacleTowerGeneration.LayoutGrammar.Cell` object if it is not empty. Cell objects has `type` and `node` properties; and a `getDoor` function. `type` is an enum that reflects if the node is an a cell that reflects a node in the **Mission Graph** or an additional cell that is used for connection. `node` is a reference to the corresponding node from the **Mission Graph**. The value of the node is null if the type is `connection`. `getDoor` function takes an x dir and y dir then returns an enum of the type of the door in that direction. The door type can be one of the 4 values:
+- `Open`: means that it is a normal opening between these two cells.
+- `KeyLock`: means that it needs a key to go through it.
+- `LeverLock`: means it will open using a lever in the nearby lever room.
+- `PuzzleLock`: means it will open when solving a puzzle in the nearby puzzle room.
+Otherwise there is no door in that direction.

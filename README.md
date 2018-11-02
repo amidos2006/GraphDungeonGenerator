@@ -12,7 +12,6 @@ The project consists of two generators:
 - **Layout Map**: lays down the graph on a 2D grid of cells where each cell can be connected from any of the four main directions (North, South, East, and West).
 
 ### Mission Graph
-
 The **Mission Graph** consists of 7 different type of nodes that can be found in the enum `ObstacleTowerGeneration.MissionGraph.NodeType`. Each node represent different game room:
 - **Start**: is the room where the level starts.
 - **End**: is the room where the level ends.
@@ -41,7 +40,17 @@ To adjust the generated **Mission Graph** use the `graphRecipe.txt` file. The fi
 For example: `addNormal, 0, 3` means the system will apply addNormal rule between 0 and 3 times. At any time, the user can remove one or two of the arguments. For example: `addNormal, 3` will apply addNormal 3 times, while `addNormal` will apply it 1 time.
 
 ### Layout Map
+The layout map is the physical representation of the **Mission Graph** in 2D space. The layout map consists of 2D grid of `ObstacleTowerGeneration.LayoutGrammar.Cell` The layout make sure the start node and end node has only one connections while the rest of cells can have up to four connections (North, South, East, and West).
 
+There is two types of cells:
+- `Normal`: are cells that corresponds to a certain node in the **Mission Graph**.
+- `Connection`: are additional cells that were added to facilitate connections in the physical space.
+
+Each cell has from 1 door up to 4 doors. Doors are the connection between cells in the phyiscal space. There is 4 different door types:
+- `Open`: means that it is a normal opening between these two cells.
+- `KeyLock`: means that it needs a key to go through it.
+- `LeverLock`: means it will open using a lever in the nearby lever room.
+- `PuzzleLock`: means it will open when solving a puzzle in the nearby puzzle room.
 
 ### How to use the Code
 You can generate a dungeon using `generateDungeon` function in `ObstacleTowerGeneration.Program` file. The function takes 3 parameters which identify the number of times the system will try to generate the dungeon. Default values are 100 for each of the dungeon pieces and 100 for the total dungeon.
@@ -54,9 +63,4 @@ The `generateDungeon` function returns a `DungeonResult` struct. The `DungeonRes
 Graph object is a list of `ObstacleTowerGeneration.MissionGraph.Node` objects that consitutes the full graph. Each node has `accessLevel`, `type`, and `id` properties. `accessLevel` is an int that reflects the value of the access level of the node, `type` is an enum that reflects the node Type, and `id` is a unique integer that identify each node. Node object also have `getChildren` function that return a list of nodes that are connected to it.
 
 #### ObstacleTowerGeneration.LayoutGrammar.Map
-Map object has a function called `get2DMap` that returns a 2D grid of `ObstacleTowerGeneration.LayoutGrammar.Map` that consitutes the level layout. Each point in the grid can be a `null` if empty or a `ObstacleTowerGeneration.LayoutGrammar.Cell` object if it is not empty. Cell objects has `type` and `node` properties; and a `getDoor` function. `type` is an enum that reflects if the node is an a cell that reflects a node in the **Mission Graph** or an additional cell that is used for connection. `node` is a reference to the corresponding node from the **Mission Graph**. The value of the node is null if the type is `connection`. `getDoor` function takes an x dir and y dir then returns an enum of the type of the door in that direction. The door type can be one of the 4 values:
-- `Open`: means that it is a normal opening between these two cells.
-- `KeyLock`: means that it needs a key to go through it.
-- `LeverLock`: means it will open using a lever in the nearby lever room.
-- `PuzzleLock`: means it will open when solving a puzzle in the nearby puzzle room.
-Otherwise there is no door in that direction.
+Map object has a function called `get2DMap` that returns a 2D grid of `ObstacleTowerGeneration.LayoutGrammar.Map` that consitutes the level layout. Each point in the grid can be a `null` if empty or a `ObstacleTowerGeneration.LayoutGrammar.Cell` object if it is not empty. Cell objects has `type` and `node` properties; and a `getDoor` function. `type` is an enum that reflects if the cell type. `node` is a reference to the corresponding node from the **Mission Graph** if the cell type is `Normal` and null otherwise. `getDoor` function takes an x dir and y dir then returns an enum that corresponds to the door type in that direction.

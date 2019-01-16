@@ -28,7 +28,7 @@ namespace ObstacleTowerGeneration.MissionGraph{
                 string type = "nodes";
                 foreach (string line in text)
                 {
-                    if (line.Trim() == "nodes" || line == "edges" || line == "roots")
+                    if (line.Trim() == "nodes" || line.Trim() == "edges" || line.Trim() == "roots")
                     {
                         type = line.Trim();
                         continue;

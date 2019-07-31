@@ -1,33 +1,57 @@
 namespace ObstacleTowerGeneration.LayoutGrammar
 {
+    /// <summary>
+    /// The basic cell that construct the full map
+    /// </summary>
     class Cell{
+        /// <summary>
+        /// The mission graph corresponding node, only works if the cell type is normal
+        /// </summary>
         public MissionGraph.Node node{
             set;
             get;
         }
-
+        /// <summary>
+        /// The type of the cell that define if there is a corresponding mission graph node for the current cell or not
+        /// </summary>
         public CellType type{
             set;
             get;
         }
-
+        /// <summary>
+        /// The current x location of the cell
+        /// </summary>
         public int x{
             set;
             get;
         }
-
+        /// <summary>
+        /// The current y location of the cell
+        /// </summary>
         public int y{
             set;
             get;
         }
-
+        /// <summary>
+        /// The current parent cell that this cell was spawned from
+        /// </summary>
         public Cell parent{
             set;
             get;
         }
 
+        /// <summary>
+        /// The four doors that spawns from that node
+        /// </summary>
         private DoorType[] doorTypes;
 
+        /// <summary>
+        /// Constructor for the layout cell
+        /// </summary>
+        /// <param name="x">the current x</param>
+        /// <param name="y">the current y</param>
+        /// <param name="type">the cell type</param>
+        /// <param name="node">the corresponding mission graph node</param>
         public Cell(int x, int y, CellType type, MissionGraph.Node node){
             this.x = x;
             this.y = y;
@@ -37,6 +61,10 @@ namespace ObstacleTowerGeneration.LayoutGrammar
             this.parent = null;
         }
 
+        /// <summary>
+        /// Create a copy of the current cell
+        /// </summary>
+        /// <returns>an exact copy of that cell</returns>
         public Cell clone(){
             Cell result = new Cell(this.x, this.y, this.type, this.node);
             result.parent = this.parent;
@@ -46,6 +74,12 @@ namespace ObstacleTowerGeneration.LayoutGrammar
             return result;
         }
 
+        /// <summary>
+        /// transform direction vector to the correct index in the door array
+        /// </summary>
+        /// <param name="dirX">the x direction where -1 west and 1 east</param>
+        /// <param name="dirY">the y direction where -1 north and 1 south</param>
+        /// <returns>the index in the door array for the corresponding direction</returns>
         private int getDoorIndex(int dirX, int dirY){
             if(dirX <= -1){
                 return 0;
@@ -62,10 +96,23 @@ namespace ObstacleTowerGeneration.LayoutGrammar
             return -1;
         }
 
+        /// <summary>
+        /// get the door type based on the input direction (east, west, north, south)
+        /// </summary>
+        /// <param name="dirX">the x direction where -1 west and 1 east</param>
+        /// <param name="dirY">the y direction where -1 north and 1 south</param>
+        /// <returns>the door type based on the direction</returns>
         public DoorType getDoor(int dirX, int dirY)
         {   
             return this.doorTypes[this.getDoorIndex(dirX, dirY)];
         }
+
+        /// <summary>
+        /// connect two cells together with a certain door type
+        /// </summary>
+        /// <param name="other">the other cell to be connect with</param>
+        /// <param name="type">the type of door connection</param>
+        /// <param name="bothWays">connect both cells</param>
         public void connectCells(Cell other, DoorType type, bool bothWays = true){
             int dirX = this.x - other.x;
             int dirY = this.y - other.y;
@@ -75,10 +122,18 @@ namespace ObstacleTowerGeneration.LayoutGrammar
             }
         }
 
+        /// <summary>
+        /// Get a unique identifer based on the current location
+        /// </summary>
+        /// <returns>a string of the current location as "x,y"</returns>
         public string getLocationString(){
             return this.x + "," + this.y;
         }
-
+        
+        /// <summary>
+        /// Draw the cell in a string correctly including the doors
+        /// </summary>
+        /// <returns>a string of how the room should look like in string rendering</returns>
         public override string ToString(){
             string result = "";
             char northDoor = '-';

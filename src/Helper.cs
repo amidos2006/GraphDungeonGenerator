@@ -5,7 +5,15 @@ using ObstacleTowerGeneration.MissionGraph;
 using ObstacleTowerGeneration.LayoutGrammar;
 
 namespace ObstacleTowerGeneration{
+    /// <summary>
+    /// A helper class that provide a group of useful function used during the layout generation
+    /// </summary>
     static class Helper{
+        /// <summary>
+        /// make a copy of the input list and return it
+        /// </summary>
+        /// <param name="list">the list needed to be copied</param>
+        /// <returns>a clone of the input list</returns>
         private static List<T> copyList<T>(List<T> list){
             List<T> clone = new List<T>();
             foreach(T v in list){
@@ -14,6 +22,14 @@ namespace ObstacleTowerGeneration{
             return clone;
         }
 
+        /// <summary>
+        /// Checks if you can still finish the dungeon and 
+        /// the player won't get stuck if they used the wrong key with the wrong door
+        /// </summary>
+        /// <param name="graph">the current mission graph</param>
+        /// <param name="root">the starting node in the graph</param>
+        /// <param name="visited">used in the recurssion to keep track of the visited nodes in the graph</param>
+        /// <returns>true if the player can reach the exist using that mission graph and false otherwise</returns>
         public static bool checkIsSolvable(Graph graph, Node root, HashSet<Node> visited = null){
             List<Node> queue = new List<Node>();
             List<Node> locks = new List<Node>();
@@ -65,6 +81,14 @@ namespace ObstacleTowerGeneration{
             return false;
         }
 
+        /// <summary>
+        /// Check if the current generated layout is solvable and 
+        /// the player won't get stuck because of using wrong key with a wrong door
+        /// </summary>
+        /// <param name="map">the generated layout from the mission graph</param>
+        /// <param name="start">the starting cell in the generated layout</param>
+        /// <param name="visited">used in the recurssion to know which cells in the layout has been visited</param>
+        /// <returns>true if the player can reach the exist using that layout and false otherwise</returns>
         public static bool checkIsSolvable(Cell[,] map, Cell start, HashSet<Cell> visited = null)
         {
             List<int[]> directions = new List<int[]>{new int[]{-1, 0}, new int[]{1, 0},
@@ -140,6 +164,12 @@ namespace ObstacleTowerGeneration{
             return false;
         }
 
+        /// <summary>
+        /// Generate a list of all the different permutations of the integer values in the list
+        /// </summary>
+        /// <param name="values">the input values used in the permutations</param>
+        /// <param name="size">the size of the permutation</param>
+        /// <returns>a list of all different permutations</returns>
         public static List<List<int>> getPermutations(List<int> values, int size){
             List<List<int>> result = new List<List<int>>();
             if(size == 0){
@@ -163,6 +193,11 @@ namespace ObstacleTowerGeneration{
             return result;
         }
 
+        /// <summary>
+        /// Shuffle the input list in place using the Random object
+        /// </summary>
+        /// <param name="random">a random object to use to shuffle the list</param>
+        /// <param name="list">the list that need to be shuffled</param>
         public static void shuffleList<T>(Random random, List<T> list){
             for(int i=0; i<list.Count; i++){
                 int newIndex = random.Next(list.Count);

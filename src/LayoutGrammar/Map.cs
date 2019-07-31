@@ -2,19 +2,43 @@ using System;
 using System.Collections.Generic;
 
 namespace ObstacleTowerGeneration.LayoutGrammar{
+    /// <summary>
+    /// The map layout class
+    /// </summary>
     class Map{
+        /// <summary>
+        /// random variable used to select cells randomly for expansions
+        /// </summary>
         private Random random;
+        /// <summary>
+        /// A list of all the possible direction to connect cells
+        /// </summary>
+        /// <value></value>
         private List<int[]> directions = new List<int[]>{new int[]{-1, 0}, new int[]{1, 0}, 
             new int[]{0, -1}, new int[]{0, 1}};
+        /// <summary>
+        /// A dictionary of all possible openings from each location
+        /// </summary>
         private Dictionary<string, List<OpenNode>> openLocations;
+        /// <summary>
+        /// A dictionary of all used x,y locations
+        /// </summary>
         private Dictionary<string, Cell> usedSpaces;
 
+        /// <summary>
+        /// Constructor that creates an empty layout
+        /// </summary>
+        /// <param name="random">the random variable that is used in generation</param>
         public Map(Random random){
             this.random = random;
             this.usedSpaces = new Dictionary<string, Cell>();
             this.openLocations = new Dictionary<string, List<OpenNode>>();
         }
 
+        /// <summary>
+        /// Start the map by adding the first cell that correspond to the starting node of the mission graph
+        /// </summary>
+        /// <param name="node">the starting cell that has only to be connected randomly from one direction</param>
         public void initializeCell(MissionGraph.Node node){
             Cell start = new Cell(0, 0, CellType.Normal, node);
             this.usedSpaces.Add(start.getLocationString(), start);
@@ -26,6 +50,12 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             // }
         }
 
+        /// <summary>
+        /// Get an empty location that has a specific access level and connected to a certain node
+        /// </summary>
+        /// <param name="parentID">the node id that need to be connected to</param>
+        /// <param name="accessLevel">the access level that the cell need to be at</param>
+        /// <returns>the empty location that has a certain parent id and access level</returns>
         private OpenNode getWorkingLocation(int parentID, int accessLevel){
             if(!this.openLocations.ContainsKey(parentID + "," + accessLevel)){
                 return null;
@@ -43,6 +73,12 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return selected;
         }
 
+        /// <summary>
+        /// Adding a new cell in the map and modifying the used spaces and open spaces
+        /// </summary>
+        /// <param name="c">the new cell that is being added</param>
+        /// <param name="nextAccess">the new access level based on that cell</param>
+        /// <param name="parentID">the parent id that new cell</param>
         private void addNewNode(Cell c, int nextAccess, int parentID){
             this.usedSpaces.Add(c.getLocationString(), c);
             if(!this.openLocations.ContainsKey(parentID + "," + nextAccess)){
@@ -57,6 +93,11 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             }
         }
 
+        /// <summary>
+        /// Get the cell that has a certain mission graph node id
+        /// </summary>
+        /// <param name="id">the id of the mission graph node</param>
+        /// <returns>the cell that have a mission graph node id</returns>
         public Cell getCell(int id){
             foreach(Cell c in this.usedSpaces.Values){
                 if(c.node != null && c.node.id == id){
@@ -66,6 +107,13 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return null;
         }
 
+        /// <summary>
+        /// Get a path between the "from" cell to the "to" cell without changing the access level
+        /// </summary>
+        /// <param name="from">the starting cell</param>
+        /// <param name="to">the ending cell</param>
+        /// <param name="accessLevel">the access level of the successor cells in the path</param>
+        /// <returns>a list of (x,y) locations that connect between "from" cell to "to" cell</returns>
         public List<int[]> getDungeonPath(Cell from, Cell to, int accessLevel){
             List<TreeNode> queue = new List<TreeNode>();
             queue.Add(new TreeNode(from.x, from.y, null, to.x, to.y));
@@ -110,6 +158,13 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return new List<int[]>();
         }
 
+        /// <summary>
+        /// Get a list of all open spaces that are needed to be transformed to cells to maintain connection between "from" cell to "to" cell
+        /// </summary>
+        /// <param name="from">the starting cell</param>
+        /// <param name="to">the ending cell</param>
+        /// <param name="maxIterations">the number of times that algorithm should try before failing</param>
+        /// <returns>the empty locations that need to be converted to "conncet" cells</returns>
         private List<int[]> getConnectionPoints(Cell from, Cell to, int maxIterations){
             int accessLevel = Math.Min(from.node.accessLevel, to.node.accessLevel);
             List<TreeNode> queue = new List<TreeNode>();
@@ -159,6 +214,13 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return new List<int[]>();
         }
 
+        /// <summary>
+        /// Create the "connect" cells to connect "from" cell to "to" cell
+        /// </summary>
+        /// <param name="from">the starting cell</param>
+        /// <param name="to">the end cell</param>
+        /// <param name="maxIterations">the maximum number of trials before failing</param>
+        /// <returns>True if the connection succeeded and False otherwise</returns>
         public bool makeConnection(Cell from, Cell to, int maxIterations){
             List<int[]> points = this.getConnectionPoints(from, to, maxIterations);
             if(points.Count == 0){
@@ -189,6 +251,12 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return true;
         }
 
+        /// <summary>
+        /// Add a new cell to the layout that correspond to a certain node in the mission graph
+        /// </summary>
+        /// <param name="node">corresponding node in the mission graph</param>
+        /// <param name="parentID">the id of the parent that the new cell should be connected to</param>
+        /// <returns>True if it succeed and False otherwise</returns>
         public bool addCell(MissionGraph.Node node, int parentID){
             if(node.type == MissionGraph.NodeType.Lock){
                 OpenNode selected = this.getWorkingLocation(parentID, node.accessLevel - 1);
@@ -246,6 +314,10 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return true;
         }
 
+        /// <summary>
+        /// return a 2D array of cells where the cells are placed in a grid
+        /// </summary>
+        /// <returns>2D array of the cells</returns>
         public Cell[,] get2DMap(){
             int minX = 0;
             int maxX = 0;
@@ -275,6 +347,10 @@ namespace ObstacleTowerGeneration.LayoutGrammar{
             return result;
         }
 
+        /// <summary>
+        /// Get a string represntation of the current layout
+        /// </summary>
+        /// <returns>a string of the current map layout</returns>
         public override string ToString(){
             string nullCell = "     \n     \n     \n     \n     ";
             string result = "";

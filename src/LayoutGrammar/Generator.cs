@@ -2,13 +2,28 @@ using System;
 using System.Collections.Generic;
 
 namespace ObstacleTowerGeneration.LayoutGrammar{
+    /// <summary>
+    /// The generator that tries to generate a map layout
+    /// </summary>
     class Generator{
+        /// <summary>
+        /// random variable for random selection
+        /// </summary>
         private Random random;
 
+        /// <summary>
+        /// Constructor of the generator class for the map layout
+        /// </summary>
+        /// <param name="random">the same random variable to be easy to replicate the results</param>
         public Generator(Random random){
             this.random = random;
         }
 
+        /// <summary>
+        /// Generate a map layout that correspond to the input mission graph
+        /// </summary>
+        /// <param name="graph">the mission graph that need to be mapped to a 2D layout</param>
+        /// <returns>a 2D layout of the mission graph</returns>
         public Map generateDungeon(MissionGraph.Graph graph){
             Map result = new Map(this.random);
             result.initializeCell(graph.nodes[0]);

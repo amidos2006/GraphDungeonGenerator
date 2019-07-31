@@ -2,28 +2,49 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace ObstacleTowerGeneration.MissionGraph{
+    /// <summary>
+    /// A class for the action of applying the patterns any number of times
+    /// </summary>
     class Recipe{
+        /// <summary>
+        /// the current pattern to be applied
+        /// </summary>
         public string action{
             set;
             get;
         }
-
+        /// <summary>
+        /// minimum number of times to apply the pattern
+        /// </summary>
         public int minTimes{
             set;
             get;
         }
-
+        /// <summary>
+        /// the maximum number of times to apply the pattern
+        /// </summary>
         public int maxTimes{
             set;
             get;
         }
 
+        /// <summary>
+        /// constructor for the recipe class
+        /// </summary>
+        /// <param name="action">the current pattern to be executed</param>
+        /// <param name="minTimes">the minimum number of times to execute the pattern</param>
+        /// <param name="maxTimes">the maximum number of times to execute the pattern</param>
         public Recipe(string action, int minTimes, int maxTimes){
             this.action = action;
             this.minTimes = minTimes;
             this.maxTimes = maxTimes;
         }
 
+        /// <summary>
+        /// Static function to load a list of all the recipe that need to be executed from a txt file
+        /// </summary>
+        /// <param name="filename">the txt file that contain the recipe list</param>
+        /// <returns>A list of all the recipe that need to be applied in order</returns>
         public static List<Recipe> loadRecipes(string filename){
             List<Recipe> recipes = new List<Recipe>();
 

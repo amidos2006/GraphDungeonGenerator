@@ -3,23 +3,38 @@ using System.IO;
 using System;
 
 namespace ObstacleTowerGeneration.MissionGraph{
+    /// <summary>
+    /// The mission graph class
+    /// </summary>
     class Graph{
+        /// <summary>
+        /// The nodes in the graph
+        /// </summary>
         public List<Node> nodes{
             set;
             get;
         }
-
+        /// <summary>
+        /// relative access level is only used in graph matching to 
+        /// modify all the nodes access level with that value
+        /// </summary>
         public int relativeAccess{
             set;
             get;
         }
 
-
+        /// <summary>
+        /// constructor that creates an empty graph
+        /// </summary>
         public Graph(){
             this.nodes = new List<Node>();
             this.relativeAccess = 0;
         }
 
+        /// <summary>
+        /// load a graph from a txt file that is formated in a certain way
+        /// </summary>
+        /// <param name="filename">the file path</param>
         public void loadGraph(string filename){
             Dictionary<int, Node> nodeDictionary = new Dictionary<int, Node>();
             using (StreamReader r = new StreamReader(filename))
@@ -61,6 +76,11 @@ namespace ObstacleTowerGeneration.MissionGraph{
             }
         }
 
+        /// <summary>
+        /// get number of connections that is connected from that specific node
+        /// </summary>
+        /// <param name="node">the node where the calculation starts from</param>
+        /// <returns>the number of connection that are connected in a direct or indirect way to that node</returns>
         public int getNumConnections(Node node){
             int result = node.getChildren().Count;
             List<Node> queue = new List<Node>();
@@ -83,10 +103,20 @@ namespace ObstacleTowerGeneration.MissionGraph{
             return result - 1;
         }
 
+        /// <summary>
+        /// get the index of the node in the node array in the graph
+        /// </summary>
+        /// <param name="n">the node needed to find its index</param>
+        /// <returns>index of the node in the node array</returns>
         public int getNodeIndex(Node n){
             return this.nodes.IndexOf(n);
         }
 
+        /// <summary>
+        /// get subset of graphs of certain size. This function is used in pattern matching.
+        /// </summary>
+        /// <param name="size">the size of the subset graphs</param>
+        /// <returns>a list of all permutations that have a specific size</returns>
         public List<Graph> getPermutations(int size)
         {
             List<int> indeces = new List<int>();
@@ -108,6 +138,10 @@ namespace ObstacleTowerGeneration.MissionGraph{
             return nodePermutations;
         }
 
+        /// <summary>
+        /// get the highest access level in all the nodes in the graph
+        /// </summary>
+        /// <returns>the highest access level in the graph</returns>
         public int getHighestAccessLevel(){
             int maxValue = 0;
             foreach(Node n in nodes){
@@ -118,6 +152,11 @@ namespace ObstacleTowerGeneration.MissionGraph{
             return maxValue;
         }
 
+        /// <summary>
+        /// check similarity between two graphs based on the similarity of nodes and connections between them
+        /// </summary>
+        /// <param name="graph">the other graph that the function is checking similarity towards</param>
+        /// <returns>True if they are similar and false otherwise</returns>
         public bool checkSimilarity(Graph graph)
         {
             for (int i = 0; i < this.nodes.Count; i++)
@@ -155,6 +194,10 @@ namespace ObstacleTowerGeneration.MissionGraph{
             return true;
         }
 
+        /// <summary>
+        /// get a representation string for the current graph
+        /// </summary>
+        /// <returns>a string that contain all the information about that graph</returns>
         public override string ToString(){
             string result = "Graph:\n";
             foreach (Node n in this.nodes)

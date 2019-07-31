@@ -3,16 +3,33 @@ using System.IO;
 using System;
 
 namespace ObstacleTowerGeneration.MissionGraph{
+    /// <summary>
+    /// Generate the mission graph from the starting graph using a recipe file
+    /// </summary>
     class Generator
     {
+        /// <summary>
+        /// Random variable that is used to help generate different random expansions from the graph everytime you run
+        /// </summary>
         private Random random;
+        /// <summary>
+        /// A dictionary for all the patterns that are loaded from the folders
+        /// </summary>
         private Dictionary<string, Pattern> patterns;
 
+        /// <summary>
+        /// Constructor for the mission graph generator
+        /// </summary>
+        /// <param name="random">using one random variable to be able to replicate the results by fixing the seed</param>
         public Generator(Random random){
             this.random = random;
             this.patterns = new Dictionary<string, Pattern>();
         }
 
+        /// <summary>
+        /// Load all the different patterns that can be used in the recipe file
+        /// </summary>
+        /// <param name="foldername">the folder that contains all the patterns</param>
         public void loadPatterns(string foldername){
             string[] folders = Directory.GetDirectories(foldername);
             foreach(string f in folders){
@@ -22,6 +39,13 @@ namespace ObstacleTowerGeneration.MissionGraph{
             }
         }
 
+        /// <summary>
+        /// Generate the mission graph and return it
+        /// </summary>
+        /// <param name="startname">the starting graph which is usually a start and exist</param>
+        /// <param name="recipename">the recipe file that need to be exectuted to generate the graph</param>
+        /// <param name="maxConnections">the maximum number of connection any node should have (4 is the default to help the layout generation)</param>
+        /// <returns>the generated mission graph</returns>
         public Graph GenerateDungeon(string startname, string recipename, int maxConnections = 4){
             Graph graph = new Graph();
             graph.loadGraph(startname);

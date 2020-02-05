@@ -6,10 +6,6 @@
 	Graph Dungeon Generator
 </h1>
 
-<p align="center">
-  <b>Current Framework Version: 0.4.0</b>
-</p>
-
 ## Description
 This project generates game dungeons similar to the first zelda dungeons with only normal keys (no key items or breakable walls). The code is based on Joris Dormans' work in [dungeon generation](http://sander.landofsand.com/publications/Dormans_Bakkes_-_Generating_Missions_and_Spaces_for_Adaptable_Play_Experiences.pdf) for [Unexplored](https://store.steampowered.com/app/506870/Unexplored/).
 

@@ -1,10 +1,21 @@
-# Graph Dungeon Generator
+<p align="center">
+	<img height="300px" src="GDG_logo.png"/>
+</p>
+
+<h1 align="center">
+	Graph Dungeon Generator
+</h1>
+
+<p align="center">
+  <b>Current Framework Version: 0.4.0</b>
+</p>
+
 ## Description
 This project generates game dungeons similar to the first zelda dungeons with only normal keys (no key items or breakable walls). The code is based on Joris Dormans' work in [dungeon generation](http://sander.landofsand.com/publications/Dormans_Bakkes_-_Generating_Missions_and_Spaces_for_Adaptable_Play_Experiences.pdf) for [Unexplored](https://store.steampowered.com/app/506870/Unexplored/).
 
 ## Features
 - generate a graph of mission graph that describe how to solve the level similar to Mark Brown's Graph in [Boss Keys series](https://www.youtube.com/playlist?list=PLc38fcMFcV_ul4D6OChdWhsNsYY3NA5B2).
-- generate a 2D grid of equal sized rooms for the mission graph similar to the [first zelda dungeon layout](http://www.gamasutra.com/view/feature/6582/learning_from_the_masters_level_.php?print=1). The number of generated rooms will be equal to the number of 
+- generate a 2D grid of equal sized rooms for the mission graph similar to the [first zelda dungeon layout](http://www.gamasutra.com/view/feature/6582/learning_from_the_masters_level_.php?print=1). The number of generated rooms will be equal to the number of
 
 ## Guide
 The project consists of two generators:
@@ -35,7 +46,7 @@ The **Mission Graph** uses graph grammar to generate the mission. All the gramma
 
 To adjust the generated **Mission Graph** use the `graphRecipe.txt` file. The file consists of several lines where the system applies each line in order for 0 to many times. If any line starts with a **#** the system will consider it as a comment and ignore it. Each line consists of 3 parts separated with commas:
 - **Rule Name**: is the name of the rule that need to be applied. If the system didn't find that rule defined, it will apply a random rule. You can use that point to apply random rules by writing **random** in the rule name.
-- **Minimum Number**: is the minimum number of times the system has to run that rule. 
+- **Minimum Number**: is the minimum number of times the system has to run that rule.
 - **Maximum Number**: is the maximum number of times the system has to run that rule.
 For example: `addNormal, 0, 3` means the system will apply addNormal rule between 0 and 3 times. At any time, the user can remove one or two of the arguments. For example: `addNormal, 3` will apply addNormal 3 times, while `addNormal` will apply it 1 time.
 

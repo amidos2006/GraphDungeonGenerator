@@ -1,5 +1,5 @@
 <p align="center">
-	<img width="300px" src="GDG_logo.png"/>
+	<img width="500px" src="GDG_logo.png"/>
 </p>
 
 <h1 align="center">
